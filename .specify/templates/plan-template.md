@@ -31,7 +31,14 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify compliance with `.specify/memory/constitution.md`:
+
+- [ ] **Mobile-First PWA**: Feature designed for mobile browsers; lightweight web tech
+- [ ] **Touch & Performance**: Touch controls, fast load, smooth rendering, short sessions
+- [ ] **Gameplay First**: Core loop fun validated before upgrades, missions, menus, or polish
+- [ ] **PWA Essentials**: Manifest, service worker, home screen installation supported
+- [ ] **Minimal Code**: No unnecessary dependencies; no backend unless clear gameplay/product need
+- [ ] **Placeholder Assets**: Using placeholders until core loop validated
 
 ## Project Structure
 
