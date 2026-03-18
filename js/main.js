@@ -5,12 +5,13 @@
 
 import { VERSION } from './version.js';
 import { createStateMachine, STATES } from './game/state.js';
-import { getHighScore, setHighScore, getMute, setMute, getSelectedRider, setSelectedRider } from './storage.js';
+import { getHighScore, setHighScore, getMute, setMute, getSelectedRider } from './storage.js';
 import { registerServiceWorker, isOffline } from './pwa.js';
 import {
   createMotorcycle,
   updateMotorcycle,
-  applyOilSlide
+  applyOilSlide,
+  tryActivateBoost
 } from './game/entities.js';
 import { renderRoad } from './game/road.js';
 import { renderEntities } from './game/render.js';
@@ -26,12 +27,14 @@ import {
   trySpawnCollectible
 } from './game/spawner.js';
 import { setupInput, applyLaneMove } from './game/input.js';
+import { laneCenterX } from './game/road.js';
 import {
   playHarleyEngineTick,
   playLaneChange,
   playCrash,
   playOilSlide,
   playCollection,
+  playBoostRev,
   resumeAudioContext
 } from './audio.js';
 
@@ -53,6 +56,7 @@ let lastTime = 0;
 
 // --- Game session (Phase 3) ---
 const SCROLL_SPEED = 180;
+const BOOST_SCROLL_MULTIPLIER = 1.6;
 const DISTANCE_SCORE_RATE = 10;
 const OIL_SLIDE_DURATION_MS = 1500;
 
@@ -123,13 +127,15 @@ function render(dt) {
   const h = canvas.height;
   const motorcycleY = h - 30;
 
-  scrollOffset += SCROLL_SPEED * dt;
+  const scrollMult = motorcycle.isBoosting ? BOOST_SCROLL_MULTIPLIER : 1;
+  scrollOffset += SCROLL_SPEED * scrollMult * dt;
   elapsedTime += dt;
 
-  updateMotorcycle(motorcycle, performance.now());
+  updateMotorcycle(motorcycle, performance.now(), w, laneCenterX);
 
-  updateObstacles(obstacles, SCROLL_SPEED, dt);
-  updateCollectibles(collectibles, SCROLL_SPEED, dt);
+  const currentScrollSpeed = SCROLL_SPEED * scrollMult;
+  updateObstacles(obstacles, currentScrollSpeed, dt);
+  updateCollectibles(collectibles, currentScrollSpeed, dt);
 
   const obsResult = trySpawnObstacle(obstacles, elapsedTime, lastObstacleSpawnTime);
   if (obsResult.spawned) lastObstacleSpawnTime = obsResult.lastSpawnTime;
@@ -171,10 +177,17 @@ function render(dt) {
   setHighScore(score);
   if (scoreDisplay) scoreDisplay.textContent = String(score);
 
-  // Harley engine sound (potato potato) - tick every ~150ms while riding
-  if (!motorcycle.isSliding && elapsedTime - lastEngineTickTime > 0.15) {
-    lastEngineTickTime = elapsedTime;
-    playHarleyEngineTick();
+  // Harley engine sound (potato potato) - tick every ~150ms while riding; rev when boosting
+  if (!motorcycle.isSliding) {
+    if (motorcycle.isBoosting) {
+      if (elapsedTime - lastEngineTickTime > 0.08) {
+        lastEngineTickTime = elapsedTime;
+        playBoostRev();
+      }
+    } else if (elapsedTime - lastEngineTickTime > 0.15) {
+      lastEngineTickTime = elapsedTime;
+      playHarleyEngineTick();
+    }
   }
 
   renderRoad(ctx, w, h, scrollOffset);
@@ -215,16 +228,7 @@ function showStartScreen() {
   if (playingOverlay) playingOverlay.classList.add('hidden');
   const hs = getHighScore();
   if (highScoreDisplay) highScoreDisplay.textContent = `High Score: ${hs}`;
-  syncRiderSelectionUI();
   syncMuteUI();
-}
-
-function syncRiderSelectionUI() {
-  const riderId = getSelectedRider();
-  document.querySelectorAll('.rider-btn').forEach((btn) => {
-    const id = parseInt(btn.dataset.rider, 10);
-    btn.setAttribute('aria-pressed', id === riderId ? 'true' : 'false');
-  });
 }
 
 function syncMuteUI() {
@@ -250,10 +254,16 @@ function enterPlayingState() {
     document.getElementById('app'),
     (dir) => {
       if (motorcycle && !motorcycle.isSliding) {
-        const newLane = applyLaneMove(motorcycle.lane, dir);
-        if (newLane !== motorcycle.lane) {
-          motorcycle.targetLane = newLane;
-          playLaneChange();
+        if (dir === 'forward') {
+          if (tryActivateBoost(motorcycle, performance.now())) {
+            playBoostRev();
+          }
+        } else {
+          const newLane = applyLaneMove(motorcycle.lane, dir);
+          if (newLane !== motorcycle.targetLane) {
+            motorcycle.targetLane = newLane;
+            playLaneChange();
+          }
         }
       }
     },
@@ -343,16 +353,6 @@ function init() {
       if (state.isStart()) state.set(STATES.PLAYING);
     });
   }
-
-  document.querySelectorAll('.rider-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const riderId = parseInt(btn.dataset.rider, 10);
-      if ([1, 2, 3].includes(riderId)) {
-        setSelectedRider(riderId);
-        syncRiderSelectionUI();
-      }
-    });
-  });
 
   if (muteBtnStart) {
     muteBtnStart.addEventListener('click', () => {

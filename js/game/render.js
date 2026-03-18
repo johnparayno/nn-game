@@ -1,9 +1,9 @@
 /**
  * Canvas rendering for game entities
- * Subway Surfers-inspired: saturated colors, bold outlines, neon accents
+ * Subway Surfers-inspired: third-person rear view, perspective, saturated colors
  */
 
-import { laneCenterX } from './road.js';
+import { laneCenterX, projectX } from './road.js';
 
 /**
  * @param {CanvasRenderingContext2D} ctx
@@ -140,22 +140,51 @@ function drawFuel(ctx, x, y, width, height) {
 
 /**
  * Harley-Davidson style cruiser - Subway Surfers palette
+ * Third-person rear view: bike faces away (exhaust at bottom)
  * @param {CanvasRenderingContext2D} ctx
  * @param {number} x - Center x of motorcycle
  * @param {number} y - Bottom y (ground level)
  * @param {boolean} isSliding
+ * @param {boolean} isBoosting
+ * @param {number} laneTilt - Slight tilt when changing lanes (-1 to 1)
  */
-function drawMotorcycle(ctx, x, y, isSliding) {
+function drawMotorcycle(ctx, x, y, isSliding, isBoosting, laneTilt) {
   const w = 44;
   const h = 52;
   const left = x - w / 2;
   const top = y - h;
 
-  if (isSliding) {
+  let tilt = laneTilt * 0.08;
+  if (isSliding) tilt = 0.3;
+
+  if (tilt !== 0) {
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(0.3);
+    ctx.rotate(tilt);
     ctx.translate(-x, -y);
+  }
+
+  // Exhaust flames when boosting
+  if (isBoosting) {
+    const flameCount = 3;
+    for (let i = 0; i < flameCount; i++) {
+      const fx = left + w * 0.25 + (i * w * 0.25);
+      const fy = y - 5;
+      const flicker = Math.sin(Date.now() * 0.02 + i) * 4;
+      const flH = 18 + flicker;
+      const grad = ctx.createLinearGradient(fx, fy, fx, fy + flH);
+      grad.addColorStop(0, 'rgba(255, 200, 50, 0.9)');
+      grad.addColorStop(0.3, 'rgba(255, 100, 0, 0.8)');
+      grad.addColorStop(0.7, 'rgba(255, 50, 0, 0.4)');
+      grad.addColorStop(1, 'rgba(255, 0, 0, 0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(fx - 4, fy + flH);
+      ctx.lineTo(fx, fy);
+      ctx.lineTo(fx + 4, fy + flH);
+      ctx.closePath();
+      ctx.fill();
+    }
   }
 
   // Wheels (dark with cyan rim accent)
@@ -198,7 +227,7 @@ function drawMotorcycle(ctx, x, y, isSliding) {
   ctx.lineWidth = 1;
   ctx.strokeRect(left + 6, top + 6, w - 12, 10);
 
-  // Handlebars (cyan)
+  // Handlebars (cyan) - rear view: bars at top
   ctx.strokeStyle = isSliding ? '#354093' : '#6AEEFD';
   ctx.lineWidth = 3;
   ctx.beginPath();
@@ -208,17 +237,17 @@ function drawMotorcycle(ctx, x, y, isSliding) {
   ctx.lineTo(left + w + 4, top + 10);
   ctx.stroke();
 
-  // Headlight (warm beam - Shandy)
-  ctx.fillStyle = '#354093';
+  // Taillight (rear view - red)
+  ctx.fillStyle = '#E31902';
   ctx.beginPath();
   ctx.arc(left + w / 2, top + 4, 5, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = '#FFED6D';
+  ctx.fillStyle = '#ff4422';
   ctx.beginPath();
   ctx.arc(left + w / 2, top + 4, 3, 0, Math.PI * 2);
   ctx.fill();
 
-  if (isSliding) ctx.restore();
+  if (tilt !== 0) ctx.restore();
 }
 
 /**
@@ -227,25 +256,38 @@ function drawMotorcycle(ctx, x, y, isSliding) {
  * @param {number} canvasHeight
  * @param {Array} obstacles
  * @param {Array} collectibles
- * @param {{ lane: Lane, isSliding: boolean }} motorcycle
+ * @param {{ lane: number, displayX: number, isSliding: boolean, isBoosting: boolean, laneTilt: number }} motorcycle
  */
 export function renderEntities(ctx, canvasWidth, canvasHeight, obstacles, collectibles, motorcycle) {
   const motorcycleY = canvasHeight - 30;
 
+  // Draw obstacles with perspective (far objects smaller, converge toward center)
   for (const obs of obstacles) {
-    const x = laneCenterX(canvasWidth, obs.lane) - obs.width / 2;
-    if (obs.type === 'car') drawCar(ctx, x, obs.y, obs.width, obs.height);
-    else if (obs.type === 'roadblock') drawRoadblock(ctx, x, obs.y, obs.width, obs.height);
-    else if (obs.type === 'oil') drawOil(ctx, x, obs.y, obs.width, obs.height);
+    const centerWorld = laneCenterX(canvasWidth, obs.lane);
+    const screenX = projectX(canvasWidth, canvasHeight, centerWorld, obs.y + obs.height / 2);
+    const scale = Math.max(0.15, Math.min(1, (obs.y + obs.height) / canvasHeight));
+    const w = obs.width * scale;
+    const h = obs.height * scale;
+    const x = screenX - w / 2;
+    if (obs.type === 'car') drawCar(ctx, x, obs.y, w, h);
+    else if (obs.type === 'roadblock') drawRoadblock(ctx, x, obs.y, w, h);
+    else if (obs.type === 'oil') drawOil(ctx, x, obs.y, w, h);
   }
 
+  // Draw collectibles with perspective
   for (const col of collectibles) {
     if (col._collected) continue;
-    const x = laneCenterX(canvasWidth, col.lane) - col.width / 2;
-    if (col.type === 'coin') drawCoin(ctx, x, col.y, col.width, col.height);
-    else drawFuel(ctx, x, col.y, col.width, col.height);
+    const centerWorld = laneCenterX(canvasWidth, col.lane);
+    const screenX = projectX(canvasWidth, canvasHeight, centerWorld, col.y + col.height / 2);
+    const scale = Math.max(0.15, Math.min(1, (col.y + col.height) / canvasHeight));
+    const w = col.width * scale;
+    const h = col.height * scale;
+    const x = screenX - w / 2;
+    if (col.type === 'coin') drawCoin(ctx, x, col.y, w, h);
+    else drawFuel(ctx, x, col.y, w, h);
   }
 
-  const mcX = laneCenterX(canvasWidth, motorcycle.lane);
-  drawMotorcycle(ctx, mcX, motorcycleY, motorcycle.isSliding);
+  // Motorcycle at bottom - use displayX for smooth lane animation
+  const mcX = motorcycle.displayX ?? laneCenterX(canvasWidth, motorcycle.lane);
+  drawMotorcycle(ctx, mcX, motorcycleY, motorcycle.isSliding, motorcycle.isBoosting ?? false, motorcycle.laneTilt ?? 0);
 }

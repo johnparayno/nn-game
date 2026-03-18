@@ -1,9 +1,36 @@
 /**
  * Road rendering and 3-lane layout
- * Subway Surfers-inspired: vibrant sky, urban subway track aesthetic
+ * Subway Surfers-inspired: third-person rear view, perspective road
  */
 
 /** @typedef {0|1|2} Lane */
+
+/** Perspective: horizon scale (0.15 = road narrows to 15% at top) */
+const HORIZON_SCALE = 0.15;
+
+/**
+ * Get perspective scale at a given screen Y (0=horizon, 1=bottom)
+ * @param {number} screenY - Y position on canvas (0 = top)
+ * @param {number} height
+ * @returns {number} Scale 0-1
+ */
+function getPerspectiveScale(screenY, height) {
+  const t = screenY / height;
+  return HORIZON_SCALE + (1 - HORIZON_SCALE) * t;
+}
+
+/**
+ * Project world X (lane-based) to screen X with perspective
+ * @param {number} width
+ * @param {number} height
+ * @param {number} laneCenterWorld - Center X in 0..width (lane-based)
+ * @param {number} screenY
+ * @returns {number}
+ */
+export function projectX(width, height, laneCenterWorld, screenY) {
+  const scale = getPerspectiveScale(screenY, height);
+  return width / 2 + (laneCenterWorld - width / 2) * scale;
+}
 
 /**
  * @param {CanvasRenderingContext2D} ctx
@@ -12,10 +39,6 @@
  * @param {number} scrollOffset - Vertical scroll offset for endless road
  */
 export function renderRoad(ctx, width, height, scrollOffset) {
-  const laneCount = 3;
-  const shoulderWidth = 24;
-  const roadWidth = width - shoulderWidth * 2;
-
   // Sky - Subway Surfers style: bright cyan to deep blue gradient
   const skyGrad = ctx.createLinearGradient(0, 0, 0, height);
   skyGrad.addColorStop(0, '#6AEEFD');
@@ -26,47 +49,53 @@ export function renderRoad(ctx, width, height, scrollOffset) {
   ctx.fillStyle = skyGrad;
   ctx.fillRect(0, 0, width, height);
 
-  // Urban buildings / walls (stylized stripes - subway tunnel feel)
-  ctx.fillStyle = 'rgba(53, 64, 147, 0.15)';
-  for (let i = 0; i < 8; i++) {
-    const stripeY = (i * 80 - scrollOffset % 80) % (height + 80) - 40;
-    ctx.fillRect(0, stripeY, shoulderWidth, 40);
-    ctx.fillRect(width - shoulderWidth, stripeY, shoulderWidth, 40);
-  }
+  // Perspective road - trapezoid (narrow at horizon, wide at bottom)
+  const topScale = HORIZON_SCALE;
+  const topWidth = width * topScale;
+  const topLeft = (width - topWidth) / 2;
+  const topRight = (width + topWidth) / 2;
 
-  // Grass / urban shoulders - vibrant green (Subway Surfers palette)
+  // Grass / urban shoulders - trapezoids
   ctx.fillStyle = '#2d5a3d';
-  ctx.fillRect(0, 0, shoulderWidth, height);
-  ctx.fillRect(width - shoulderWidth, 0, shoulderWidth, height);
-  // Highlight edge
-  ctx.strokeStyle = '#3d7a4d';
-  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(shoulderWidth, 0);
-  ctx.lineTo(shoulderWidth, height);
-  ctx.moveTo(width - shoulderWidth, 0);
-  ctx.lineTo(width - shoulderWidth, height);
-  ctx.stroke();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(topLeft, 0);
+  ctx.lineTo(width * 0.15, height);
+  ctx.lineTo(0, height);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(width, 0);
+  ctx.lineTo(topRight, 0);
+  ctx.lineTo(width * 0.85, height);
+  ctx.lineTo(width, height);
+  ctx.closePath();
+  ctx.fill();
 
-  // Road surface - darker asphalt with slight blue tint (subway track bed)
+  // Road surface - trapezoid
   ctx.fillStyle = '#2a2a3a';
-  ctx.fillRect(shoulderWidth, 0, roadWidth, height);
+  ctx.beginPath();
+  ctx.moveTo(topLeft, 0);
+  ctx.lineTo(topRight, 0);
+  ctx.lineTo(width * 0.85, height);
+  ctx.lineTo(width * 0.15, height);
+  ctx.closePath();
+  ctx.fill();
 
-  // Road edge lines - bright yellow (Subway Surfers style)
+  // Road edge lines
   ctx.strokeStyle = '#FFED6D';
   ctx.lineWidth = 4;
   ctx.shadowColor = 'rgba(255, 237, 109, 0.6)';
   ctx.shadowBlur = 8;
-  ctx.setLineDash([]);
   ctx.beginPath();
-  ctx.moveTo(shoulderWidth, 0);
-  ctx.lineTo(shoulderWidth, height);
-  ctx.moveTo(width - shoulderWidth, 0);
-  ctx.lineTo(width - shoulderWidth, height);
+  ctx.moveTo(topLeft, 0);
+  ctx.lineTo(width * 0.15, height);
+  ctx.moveTo(topRight, 0);
+  ctx.lineTo(width * 0.85, height);
   ctx.stroke();
   ctx.shadowBlur = 0;
 
-  // Lane dividers - dashed yellow, scroll with road
+  // Lane dividers - dashed yellow, perspective
   ctx.strokeStyle = '#FFED6D';
   ctx.lineWidth = 3;
   const dashLen = 18;
@@ -74,13 +103,15 @@ export function renderRoad(ctx, width, height, scrollOffset) {
   const segmentHeight = dashLen + gapLen;
   const dashOffset = scrollOffset % segmentHeight;
 
-  for (let i = 1; i < laneCount; i++) {
-    const x = (i / laneCount) * width;
+  for (let i = 1; i < 3; i++) {
+    const laneT = i / 3;
+    const topX = topLeft + topWidth * laneT;
+    const bottomX = width * 0.15 + (width * 0.7) * laneT;
     ctx.setLineDash([dashLen, gapLen]);
     ctx.lineDashOffset = -dashOffset;
     ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, height + segmentHeight);
+    ctx.moveTo(topX, 0);
+    ctx.lineTo(bottomX, height + segmentHeight);
     ctx.stroke();
   }
 

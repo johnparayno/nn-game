@@ -97,17 +97,27 @@ export function playLaneChange() {
 }
 
 /**
- * Sound: crash (car, roadblock) - loud impact
+ * Sound: crash (car, roadblock) - loud impact, metal crunch
  */
 export function playCrash() {
   if (getMute()) return;
-  playTone({
-    freq: 120,
-    duration: 0.35,
-    type: 'sawtooth',
-    gain: 0.25,
-    freqEnd: 35
-  });
+  const ctx = getContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(180, now);
+  osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+  osc.frequency.setValueAtTime(80, now + 0.15);
+  osc.frequency.exponentialRampToValueAtTime(25, now + 0.4);
+  gainNode.gain.setValueAtTime(0, now);
+  gainNode.gain.linearRampToValueAtTime(0.3, now + 0.02);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+  osc.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.4);
 }
 
 /**
@@ -125,15 +135,38 @@ export function playOilSlide() {
 }
 
 /**
- * Sound: collectible (coin, fuel)
+ * Sound: collectible coin - "ching ching" double tap
  */
 export function playCollection() {
   if (getMute()) return;
+  const ctx = getContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  for (let i = 0; i < 2; i++) {
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880 + i * 220, now + i * 0.08);
+    gainNode.gain.setValueAtTime(0, now + i * 0.08);
+    gainNode.gain.linearRampToValueAtTime(0.2, now + i * 0.08 + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.12);
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    osc.start(now + i * 0.08);
+    osc.stop(now + i * 0.08 + 0.12);
+  }
+}
+
+/**
+ * Sound: boost / revving - engine revs up
+ */
+export function playBoostRev() {
+  if (getMute()) return;
   playTone({
-    freq: 600,
-    duration: 0.1,
-    type: 'sine',
-    gain: 0.15,
-    freqEnd: 800
+    freq: 120,
+    duration: 0.12,
+    type: 'sawtooth',
+    gain: 0.14,
+    freqEnd: 200
   });
 }

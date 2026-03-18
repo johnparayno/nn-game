@@ -5,7 +5,7 @@
  */
 
 /** @typedef {0|1|2} Lane */
-/** @typedef {'left'|'right'} MoveDirection */
+/** @typedef {'left'|'right'|'forward'} MoveDirection */
 
 const THROTTLE_MS = 150;
 const SWIPE_THRESHOLD = 50;
@@ -30,7 +30,7 @@ export function setupInput(element, onMove, canAcceptInput) {
     onMove(direction);
   }
 
-  /** Desktop: Arrow Left/Right, A/D (key repeat ignored) */
+  /** Desktop: Arrow Left/Right/Up, A/D/W (key repeat ignored) */
   function handleKeyDown(e) {
     if (e.repeat) return;
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
@@ -39,6 +39,9 @@ export function setupInput(element, onMove, canAcceptInput) {
     } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
       e.preventDefault();
       tryMove('right');
+    } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+      e.preventDefault();
+      tryMove('forward');
     }
   }
 
@@ -47,11 +50,17 @@ export function setupInput(element, onMove, canAcceptInput) {
     touchStartY = e.touches[0].clientY;
   }
 
-  /** Mobile: swipe (horizontal dominant) or tap in bottom zone */
+  /** Mobile: swipe (horizontal = lane, vertical up = boost) or tap in bottom zone */
   function handleTouchEnd(e) {
     const touch = e.changedTouches[0];
     const dx = touch.clientX - touchStartX;
     const dy = touch.clientY - touchStartY;
+
+    if (Math.abs(dy) >= SWIPE_THRESHOLD && Math.abs(dy) >= Math.abs(dx) && dy < 0) {
+      e.preventDefault();
+      tryMove('forward');
+      return;
+    }
 
     if (Math.abs(dx) >= SWIPE_THRESHOLD && Math.abs(dx) >= Math.abs(dy)) {
       e.preventDefault();
@@ -62,7 +71,7 @@ export function setupInput(element, onMove, canAcceptInput) {
     const rect = element.getBoundingClientRect();
     const tapZoneTop = rect.top + rect.height * (1 - TAP_ZONE_BOTTOM_FRACTION);
     const inTapZone = touchStartY >= tapZoneTop;
-    if (inTapZone && Math.abs(dx) < SWIPE_THRESHOLD) {
+    if (inTapZone && Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) {
       e.preventDefault();
       const midX = rect.left + rect.width / 2;
       tryMove(touch.clientX < midX ? 'left' : 'right');

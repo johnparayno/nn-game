@@ -12,7 +12,8 @@ const MOTORCYCLE_HEIGHT = 52;
 
 /**
  * Check if motorcycle collides with obstacle (AABB)
- * @param {{ lane: Lane, targetLane: Lane }} motorcycle
+ * Uses displayX when available for smooth lane interpolation
+ * @param {{ lane: Lane, displayX?: number }} motorcycle
  * @param {{ lane: Lane, y: number, width: number, height: number }} obstacle
  * @param {number} canvasWidth
  * @param {number} canvasHeight
@@ -20,7 +21,8 @@ const MOTORCYCLE_HEIGHT = 52;
  * @returns {boolean}
  */
 export function checkObstacleCollision(motorcycle, obstacle, canvasWidth, canvasHeight, motorcycleY) {
-  const mcX = laneCenterX(canvasWidth, motorcycle.lane) - MOTORCYCLE_WIDTH / 2;
+  const mcCenterX = motorcycle.displayX != null ? motorcycle.displayX : laneCenterX(canvasWidth, motorcycle.lane);
+  const mcX = mcCenterX - MOTORCYCLE_WIDTH / 2;
   const mcY = motorcycleY - MOTORCYCLE_HEIGHT;
   const obsX = laneCenterX(canvasWidth, obstacle.lane) - obstacle.width / 2;
   return (
@@ -33,7 +35,8 @@ export function checkObstacleCollision(motorcycle, obstacle, canvasWidth, canvas
 
 /**
  * Check if motorcycle collects collectible
- * @param {{ lane: Lane }} motorcycle
+ * Uses displayX when available for smooth lane interpolation
+ * @param {{ lane: Lane, displayX?: number }} motorcycle
  * @param {{ lane: Lane, y: number, width: number, height: number }} collectible
  * @param {number} canvasWidth
  * @param {number} canvasHeight
@@ -41,7 +44,8 @@ export function checkObstacleCollision(motorcycle, obstacle, canvasWidth, canvas
  * @returns {boolean}
  */
 export function checkCollectibleCollision(motorcycle, collectible, canvasWidth, canvasHeight, motorcycleY) {
-  const mcX = laneCenterX(canvasWidth, motorcycle.lane) - MOTORCYCLE_WIDTH / 2;
+  const mcCenterX = motorcycle.displayX != null ? motorcycle.displayX : laneCenterX(canvasWidth, motorcycle.lane);
+  const mcX = mcCenterX - MOTORCYCLE_WIDTH / 2;
   const mcY = motorcycleY - MOTORCYCLE_HEIGHT;
   const colX = laneCenterX(canvasWidth, collectible.lane) - collectible.width / 2;
   return (
