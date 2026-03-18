@@ -69,30 +69,58 @@ function playTone({ freq, duration, type = 'sine', gain = 0.15, freqEnd }) {
 }
 
 /**
- * Sound: lane change / movement
+ * Harley V-twin "potato potato" engine tick - call periodically while riding
  */
-export function playMovement() {
+export function playHarleyEngineTick() {
   if (getMute()) return;
   playTone({
-    freq: 220,
-    duration: 0.08,
-    type: 'sine',
-    gain: 0.12,
-    freqEnd: 280
+    freq: 85,
+    duration: 0.06,
+    type: 'sawtooth',
+    gain: 0.08,
+    freqEnd: 65
   });
 }
 
 /**
- * Sound: collision (car, roadblock, oil)
+ * Sound: lane change (Harley-style whoosh / engine blip)
  */
-export function playCollision() {
+export function playLaneChange() {
   if (getMute()) return;
   playTone({
-    freq: 80,
-    duration: 0.2,
+    freq: 120,
+    duration: 0.1,
     type: 'sawtooth',
-    gain: 0.2,
-    freqEnd: 40
+    gain: 0.1,
+    freqEnd: 90
+  });
+}
+
+/**
+ * Sound: crash (car, roadblock) - loud impact
+ */
+export function playCrash() {
+  if (getMute()) return;
+  playTone({
+    freq: 120,
+    duration: 0.35,
+    type: 'sawtooth',
+    gain: 0.25,
+    freqEnd: 35
+  });
+}
+
+/**
+ * Sound: oil slide / skid
+ */
+export function playOilSlide() {
+  if (getMute()) return;
+  playTone({
+    freq: 100,
+    duration: 0.15,
+    type: 'sawtooth',
+    gain: 0.12,
+    freqEnd: 50
   });
 }
 

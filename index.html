@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#1a1a1a">
+  <meta name="theme-color" content="#354093">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="screen-orientation" content="portrait">
   <title>Motorcycle Arcade</title>
   <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Righteous&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -60,9 +63,6 @@
     <div id="playing-overlay" class="playing-overlay hidden">
       <div id="score-display" class="hud-score">0</div>
       <button id="mute-btn-playing" type="button" class="mute-btn-hud" aria-label="Toggle sound">🔊</button>
-      <div class="fuel-container">
-        <div id="fuel-meter" class="fuel-meter"></div>
-      </div>
     </div>
     <canvas id="game-canvas" class="hidden"></canvas>
 

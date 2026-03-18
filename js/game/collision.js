@@ -7,8 +7,8 @@ import { laneCenterX } from './road.js';
 
 /** @typedef {0|1|2} Lane */
 
-const MOTORCYCLE_WIDTH = 40;
-const MOTORCYCLE_HEIGHT = 50;
+const MOTORCYCLE_WIDTH = 44;
+const MOTORCYCLE_HEIGHT = 52;
 
 /**
  * Check if motorcycle collides with obstacle (AABB)

@@ -1,5 +1,5 @@
-/* Motorcycle Arcade - Main Styles */
-/* Responsive layout, portrait lock */
+/* Motorcycle Arcade - Subway Surfers Style */
+/* Vibrant colors, bold typography, urban arcade aesthetic */
 
 *,
 *::before,
@@ -21,8 +21,9 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   overflow: hidden;
-  background-color: #1a1a1a;
+  background: linear-gradient(165deg, #354093 0%, #1a1a2e 50%, #0d0d1a 100%);
   color: #fff;
+  font-family: 'Righteous', sans-serif;
 }
 
 body {
@@ -58,17 +59,17 @@ body {
   max-height: 100vh;
   max-height: 100dvh;
   object-fit: contain;
-  background-color: #0d0d0d;
+  background: linear-gradient(180deg, #6AEEFD 0%, #354093 60%, #1a1a2e 100%);
 }
 
-/* Screens (loading, start) */
+/* Screens (loading, start) - Subway Surfers vibe */
 .screen {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0d0d0d;
+  background: linear-gradient(165deg, #354093 0%, #1a1a2e 40%, #0d0d1a 100%);
   z-index: 2;
 }
 
@@ -82,39 +83,67 @@ body {
   padding: 1.5rem;
 }
 
+/* Game Over screen - Electric Red accent */
+#game-over-screen .start-content h1 {
+  color: #E31902;
+  text-shadow:
+    0 0 10px rgba(227, 25, 2, 0.6),
+    0 0 20px rgba(255, 237, 109, 0.3),
+    3px 3px 0 #FFED6D,
+    -1px -1px 0 #354093;
+}
+
+#game-over-screen #final-score,
+#game-over-screen #game-over-high-score {
+  color: #C6FEFE;
+  text-shadow: 0 0 8px rgba(198, 254, 254, 0.5);
+}
+
 .loading-content h1,
 .start-content h1 {
-  font-size: 1.5rem;
+  font-family: 'Bangers', cursive;
+  font-size: 2.25rem;
   margin: 0 0 1rem;
-  font-weight: 600;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #FFED6D;
+  text-shadow:
+    0 0 10px rgba(255, 237, 109, 0.6),
+    0 0 20px rgba(106, 238, 253, 0.4),
+    3px 3px 0 #E31902,
+    -1px -1px 0 #354093;
 }
 
 .progress-container {
-  width: 200px;
-  height: 8px;
-  background: #333;
-  border-radius: 4px;
+  width: 220px;
+  height: 12px;
+  background: rgba(53, 64, 147, 0.6);
+  border: 2px solid #6AEEFD;
+  border-radius: 8px;
   overflow: hidden;
   margin: 0 auto 0.5rem;
+  box-shadow: 0 0 12px rgba(106, 238, 253, 0.3);
 }
 
 .progress-bar {
   height: 100%;
   width: 0%;
-  background: #4a9;
+  background: linear-gradient(90deg, #FFED6D, #F7BE76);
   transition: width 0.2s ease;
+  border-radius: 6px;
 }
 
 #progress-text {
   font-size: 0.875rem;
-  color: #888;
+  color: #C6FEFE;
   margin: 0;
 }
 
 .start-content #high-score-display {
-  font-size: 1rem;
+  font-size: 1.125rem;
   margin: 0 0 1rem;
-  color: #aaa;
+  color: #C6FEFE;
+  text-shadow: 0 0 8px rgba(198, 254, 254, 0.5);
 }
 
 .rider-selection {
@@ -124,7 +153,7 @@ body {
 .rider-label {
   display: block;
   font-size: 0.875rem;
-  color: #aaa;
+  color: #C6FEFE;
   margin-bottom: 0.5rem;
 }
 
@@ -135,68 +164,82 @@ body {
 }
 
 .rider-btn {
-  width: 2.5rem;
-  height: 2.5rem;
-  font-size: 1rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #fff;
-  background: #333;
-  border: 2px solid #555;
-  border-radius: 8px;
+  background: linear-gradient(180deg, #354093, #252d6b);
+  border: 2px solid #6AEEFD;
+  border-radius: 10px;
   cursor: pointer;
   touch-action: manipulation;
+  box-shadow: 0 4px 0 #1a1a2e, 0 0 12px rgba(106, 238, 253, 0.3);
 }
 
 .rider-btn:hover,
 .rider-btn:active {
-  background: #444;
+  background: linear-gradient(180deg, #4553a8, #354093);
+  transform: translateY(1px);
+  box-shadow: 0 2px 0 #1a1a2e, 0 0 16px rgba(106, 238, 253, 0.5);
 }
 
 .rider-btn[aria-pressed="true"] {
-  background: #4a9;
-  border-color: #5ba;
+  background: linear-gradient(180deg, #FFED6D, #F7BE76);
+  border-color: #FFED6D;
+  color: #1a1a2e;
+  box-shadow: 0 4px 0 #c9a227, 0 0 16px rgba(255, 237, 109, 0.6);
 }
 
 .mute-btn {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  color: #aaa;
+  color: #C6FEFE;
   background: transparent;
-  border: 1px solid #555;
-  border-radius: 6px;
+  border: 2px solid #6AEEFD;
+  border-radius: 8px;
   cursor: pointer;
   touch-action: manipulation;
 }
 
 .mute-btn:hover,
 .mute-btn:active {
-  color: #fff;
-  border-color: #666;
+  color: #FFED6D;
+  border-color: #FFED6D;
+  box-shadow: 0 0 12px rgba(255, 237, 109, 0.4);
 }
 
 .play-btn {
-  padding: 0.75rem 1.5rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #fff;
-  background: #4a9;
+  padding: 0.875rem 2rem;
+  font-size: 1.25rem;
+  font-family: 'Bangers', cursive;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #1a1a2e;
+  background: linear-gradient(180deg, #FFED6D, #F7BE76);
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   touch-action: manipulation;
+  box-shadow:
+    0 6px 0 #c9a227,
+    0 0 20px rgba(255, 237, 109, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .play-btn:hover,
 .play-btn:active {
-  background: #5ba;
+  background: linear-gradient(180deg, #fff176, #FFED6D);
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 #c9a227, 0 0 24px rgba(255, 237, 109, 0.6);
 }
 
 #game-canvas.hidden {
   display: none;
 }
 
-/* Playing HUD */
+/* Playing HUD - neon arcade style */
 .playing-overlay {
   position: absolute;
   inset: 0;
@@ -212,36 +255,45 @@ body {
 }
 
 .hud-score {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #fff;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(74, 153, 153, 0.4);
-  padding: 0.25rem 0.5rem;
-  background: rgba(0,0,0,0.4);
-  border-radius: 8px;
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #FFED6D;
+  text-shadow:
+    0 0 10px rgba(255, 237, 109, 0.8),
+    0 0 20px rgba(106, 238, 253, 0.4),
+    2px 2px 0 #E31902;
+  padding: 0.35rem 0.75rem;
+  background: rgba(53, 64, 147, 0.7);
+  border: 2px solid #6AEEFD;
+  border-radius: 10px;
   align-self: flex-start;
+  box-shadow: 0 0 16px rgba(106, 238, 253, 0.3);
 }
 
 .mute-btn-hud {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   font-size: 1.25rem;
-  background: rgba(0, 0, 0, 0.6);
-  border: 2px solid #555;
-  border-radius: 8px;
+  background: rgba(53, 64, 147, 0.8);
+  border: 2px solid #6AEEFD;
+  border-radius: 10px;
   cursor: pointer;
   touch-action: manipulation;
   pointer-events: auto;
   color: #fff;
+  box-shadow: 0 0 12px rgba(106, 238, 253, 0.3);
 }
 
 .mute-btn-hud:hover,
 .mute-btn-hud:active {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(106, 238, 253, 0.3);
+  box-shadow: 0 0 20px rgba(106, 238, 253, 0.6);
 }
 
 .fuel-container {
@@ -249,19 +301,20 @@ body {
   bottom: 1rem;
   left: 1rem;
   right: 1rem;
-  height: 12px;
-  background: rgba(0,0,0,0.6);
-  border: 2px solid #555;
-  border-radius: 6px;
+  height: 14px;
+  background: rgba(53, 64, 147, 0.6);
+  border: 2px solid #6AEEFD;
+  border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 0 12px rgba(106, 238, 253, 0.2);
 }
 
 .fuel-meter {
   height: 100%;
   width: 100%;
-  background: linear-gradient(to right, #4a9, #2d7a5a);
+  background: linear-gradient(90deg, #FFED6D, #F7BE76);
   transition: width 0.1s linear;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 /* Version display - lower right corner */
@@ -270,7 +323,7 @@ body {
   bottom: 0.5rem;
   right: 0.5rem;
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(198, 254, 254, 0.6);
   z-index: 10;
   pointer-events: none;
   user-select: none;
@@ -289,7 +342,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: #0d0d0d;
+  background: linear-gradient(165deg, #354093 0%, #1a1a2e 100%);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -299,7 +352,7 @@ body {
 
 .portrait-lock-overlay p {
   font-size: 1.125rem;
-  color: #aaa;
+  color: #C6FEFE;
   margin: 0 0 1rem;
   max-width: 280px;
 }
@@ -307,7 +360,7 @@ body {
 .portrait-lock-icon {
   font-size: 4rem;
   margin-bottom: 1rem;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 @media screen and (orientation: landscape) and (max-height: 500px) {

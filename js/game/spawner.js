@@ -9,7 +9,7 @@ import { createCollectible } from './entities.js';
 /** @typedef {0|1|2} Lane */
 
 const OBSTACLE_TYPES = ['car', 'roadblock', 'oil'];
-const COLLECTIBLE_TYPES = ['coin', 'fuel'];
+const COLLECTIBLE_TYPES = ['coin'];
 
 const OBSTACLE_SIZES = {
   car: { width: 45, height: 60 },
@@ -18,8 +18,7 @@ const OBSTACLE_SIZES = {
 };
 
 const COLLECTIBLE_SIZES = {
-  coin: { width: 30, height: 30, value: 10 },
-  fuel: { width: 35, height: 40, value: 25 }
+  coin: { width: 30, height: 30, value: 10 }
 };
 
 const BASE_SPAWN_INTERVAL_OBSTACLE = 1.8;

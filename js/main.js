@@ -26,7 +26,14 @@ import {
   trySpawnCollectible
 } from './game/spawner.js';
 import { setupInput, applyLaneMove } from './game/input.js';
-import { playMovement, playCollision, playCollection, resumeAudioContext } from './audio.js';
+import {
+  playHarleyEngineTick,
+  playLaneChange,
+  playCrash,
+  playOilSlide,
+  playCollection,
+  resumeAudioContext
+} from './audio.js';
 
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas?.getContext('2d');
@@ -40,15 +47,12 @@ const muteBtnStart = document.getElementById('mute-btn-start');
 const muteBtnPlaying = document.getElementById('mute-btn-playing');
 const playingOverlay = document.getElementById('playing-overlay');
 const scoreDisplay = document.getElementById('score-display');
-const fuelMeter = document.getElementById('fuel-meter');
 
 const state = createStateMachine();
 let lastTime = 0;
 
 // --- Game session (Phase 3) ---
 const SCROLL_SPEED = 180;
-const FUEL_MAX = 100;
-const FUEL_DEPLETE_RATE = 15;
 const DISTANCE_SCORE_RATE = 10;
 const OIL_SLIDE_DURATION_MS = 1500;
 
@@ -59,10 +63,10 @@ let scrollOffset = 0;
 let elapsedTime = 0;
 let lastObstacleSpawnTime = -2;
 let lastCollectibleSpawnTime = -2;
+let lastEngineTickTime = 0;
 let score = 0;
 let distanceScore = 0;
 let coinScore = 0;
-let fuel = FUEL_MAX;
 let inputCleanup = null;
 
 function resetGame() {
@@ -74,10 +78,10 @@ function resetGame() {
   elapsedTime = 0;
   lastObstacleSpawnTime = -2;
   lastCollectibleSpawnTime = -2;
+  lastEngineTickTime = 0;
   score = 0;
   distanceScore = 0;
   coinScore = 0;
-  fuel = FUEL_MAX;
 }
 
 // --- Canvas setup and resize (T007) ---
@@ -134,15 +138,15 @@ function render(dt) {
   if (colResult.spawned) lastCollectibleSpawnTime = colResult.lastSpawnTime;
 
   distanceScore = Math.floor(elapsedTime * DISTANCE_SCORE_RATE);
-  fuel = Math.max(0, fuel - FUEL_DEPLETE_RATE * dt);
 
   for (const obs of obstacles) {
     if (checkObstacleCollision(motorcycle, obs, w, h, motorcycleY)) {
-      playCollision();
       if (obs.type === 'oil') {
+        playOilSlide();
         applyOilSlide(motorcycle, OIL_SLIDE_DURATION_MS, performance.now());
         obs._collected = true;
       } else {
+        playCrash();
         triggerGameOver();
         return;
       }
@@ -155,15 +159,8 @@ function render(dt) {
       playCollection();
       if (col.type === 'coin') {
         coinScore += col.value;
-      } else {
-        fuel = Math.min(FUEL_MAX, fuel + col.value);
       }
     }
-  }
-
-  if (fuel <= 0) {
-    triggerGameOver();
-    return;
   }
 
   obstacles = obstacles.filter((o) => !o._collected && !isOffScreen(o));
@@ -173,7 +170,12 @@ function render(dt) {
 
   setHighScore(score);
   if (scoreDisplay) scoreDisplay.textContent = String(score);
-  if (fuelMeter) fuelMeter.style.width = `${(fuel / FUEL_MAX) * 100}%`;
+
+  // Harley engine sound (potato potato) - tick every ~150ms while riding
+  if (!motorcycle.isSliding && elapsedTime - lastEngineTickTime > 0.15) {
+    lastEngineTickTime = elapsedTime;
+    playHarleyEngineTick();
+  }
 
   renderRoad(ctx, w, h, scrollOffset);
   renderEntities(ctx, w, h, obstacles, collectibles, motorcycle);
@@ -251,7 +253,7 @@ function enterPlayingState() {
         const newLane = applyLaneMove(motorcycle.lane, dir);
         if (newLane !== motorcycle.lane) {
           motorcycle.targetLane = newLane;
-          playMovement();
+          playLaneChange();
         }
       }
     },

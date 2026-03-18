@@ -1,6 +1,6 @@
 /**
  * Canvas rendering for game entities
- * Draws motorcycle, obstacles, collectibles with visible designs
+ * Subway Surfers-inspired: saturated colors, bold outlines, neon accents
  */
 
 import { laneCenterX } from './road.js';
@@ -14,17 +14,20 @@ import { laneCenterX } from './road.js';
  */
 function drawCar(ctx, x, y, width, height) {
   const pad = width * 0.1;
-  // Body (red sedan)
-  ctx.fillStyle = '#c33';
+  // Body - Electric Red (Subway Surfers)
+  ctx.fillStyle = '#E31902';
   ctx.fillRect(x + pad, y + pad, width - pad * 2, height - pad * 2);
-  ctx.strokeStyle = '#a22';
+  ctx.strokeStyle = '#ff4422';
   ctx.lineWidth = 2;
   ctx.strokeRect(x + pad, y + pad, width - pad * 2, height - pad * 2);
-  // Windshield
-  ctx.fillStyle = '#5a9fd4';
+  // Windshield - Electric Blue
+  ctx.fillStyle = '#6AEEFD';
   ctx.fillRect(x + width * 0.25, y + height * 0.2, width * 0.5, height * 0.35);
+  ctx.strokeStyle = '#C6FEFE';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x + width * 0.25, y + height * 0.2, width * 0.5, height * 0.35);
   // Wheels
-  ctx.fillStyle = '#222';
+  ctx.fillStyle = '#1a1a2e';
   ctx.fillRect(x + width * 0.1, y + height - pad - 8, width * 0.25, 8);
   ctx.fillRect(x + width * 0.65, y + height - pad - 8, width * 0.25, 8);
 }
@@ -37,8 +40,8 @@ function drawCar(ctx, x, y, width, height) {
  * @param {number} height
  */
 function drawRoadblock(ctx, x, y, width, height) {
-  // Orange traffic cone / barrier
-  ctx.fillStyle = '#f80';
+  // Traffic cone - Mellow Apricot / Shandy (Subway Surfers)
+  ctx.fillStyle = '#F7BE76';
   ctx.beginPath();
   ctx.moveTo(x + width / 2, y + height);
   ctx.lineTo(x, y + height * 0.3);
@@ -47,7 +50,7 @@ function drawRoadblock(ctx, x, y, width, height) {
   ctx.lineTo(x + width, y + height * 0.3);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = '#c60';
+  ctx.strokeStyle = '#FFED6D';
   ctx.lineWidth = 2;
   ctx.stroke();
   // White stripe
@@ -63,21 +66,21 @@ function drawRoadblock(ctx, x, y, width, height) {
  * @param {number} height
  */
 function drawOil(ctx, x, y, width, height) {
-  // Dark shiny puddle (ellipse)
+  // Dark shiny puddle - with cyan highlight (Subway Surfers style)
   ctx.save();
   ctx.translate(x + width / 2, y + height / 2);
   ctx.scale(1, 0.5);
   ctx.beginPath();
   ctx.ellipse(0, 0, width / 2 - 2, height / 2 - 2, 0, 0, Math.PI * 2);
-  ctx.fillStyle = '#1a1a1a';
+  ctx.fillStyle = '#1a1a2e';
   ctx.fill();
-  ctx.strokeStyle = '#333';
+  ctx.strokeStyle = '#354093';
   ctx.lineWidth = 2;
   ctx.stroke();
-  // Highlight
+  // Highlight - Diamond cyan
   ctx.beginPath();
   ctx.ellipse(-width * 0.15, -height * 0.2, width * 0.2, height * 0.15, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(80,80,90,0.5)';
+  ctx.fillStyle = 'rgba(198, 254, 254, 0.5)';
   ctx.fill();
   ctx.restore();
 }
@@ -93,22 +96,22 @@ function drawCoin(ctx, x, y, width, height) {
   const cx = x + width / 2;
   const cy = y + height / 2;
   const r = Math.min(width, height) / 2 - 2;
-  // Gold coin
+  // Gold coin - Shandy / Mellow Apricot (Subway Surfers)
   const grad = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, 0, cx, cy, r);
-  grad.addColorStop(0, '#ffd700');
-  grad.addColorStop(0.5, '#f0c040');
-  grad.addColorStop(1, '#c9a227');
+  grad.addColorStop(0, '#FFED6D');
+  grad.addColorStop(0.4, '#F7BE76');
+  grad.addColorStop(1, '#e6a830');
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.fillStyle = grad;
   ctx.fill();
-  ctx.strokeStyle = '#b8860b';
+  ctx.strokeStyle = '#c9a227';
   ctx.lineWidth = 2;
   ctx.stroke();
   // Inner circle (coin face)
   ctx.beginPath();
   ctx.arc(cx, cy, r * 0.6, 0, Math.PI * 2);
-  ctx.strokeStyle = '#c9a227';
+  ctx.strokeStyle = '#e6a830';
   ctx.lineWidth = 1;
   ctx.stroke();
 }
@@ -121,29 +124,30 @@ function drawCoin(ctx, x, y, width, height) {
  * @param {number} height
  */
 function drawFuel(ctx, x, y, width, height) {
-  // Gas can shape
-  ctx.fillStyle = '#2a7a4a';
+  // Gas can - Electric Blue / Diamond (Subway Surfers)
+  ctx.fillStyle = '#6AEEFD';
   ctx.fillRect(x + width * 0.2, y + height * 0.1, width * 0.6, height * 0.7);
-  ctx.strokeStyle = '#1a5a3a';
+  ctx.strokeStyle = '#C6FEFE';
   ctx.lineWidth = 2;
   ctx.strokeRect(x + width * 0.2, y + height * 0.1, width * 0.6, height * 0.7);
   // Nozzle
-  ctx.fillStyle = '#444';
+  ctx.fillStyle = '#354093';
   ctx.fillRect(x + width * 0.35, y, width * 0.3, height * 0.2);
-  // Fuel level indicator (green)
-  ctx.fillStyle = '#4a9';
+  // Fuel level indicator (yellow)
+  ctx.fillStyle = '#FFED6D';
   ctx.fillRect(x + width * 0.25, y + height * 0.2, width * 0.5, height * 0.5);
 }
 
 /**
+ * Harley-Davidson style cruiser - Subway Surfers palette
  * @param {CanvasRenderingContext2D} ctx
  * @param {number} x - Center x of motorcycle
  * @param {number} y - Bottom y (ground level)
  * @param {boolean} isSliding
  */
 function drawMotorcycle(ctx, x, y, isSliding) {
-  const w = 40;
-  const h = 50;
+  const w = 44;
+  const h = 52;
   const left = x - w / 2;
   const top = y - h;
 
@@ -154,26 +158,64 @@ function drawMotorcycle(ctx, x, y, isSliding) {
     ctx.translate(-x, -y);
   }
 
-  // Body (main frame)
-  ctx.fillStyle = isSliding ? '#666' : '#2a7a9a';
-  ctx.fillRect(left + 5, top + 15, w - 10, h - 25);
-  ctx.strokeStyle = isSliding ? '#555' : '#1a5a7a';
+  // Wheels (dark with cyan rim accent)
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(left + 2, y - 10, 14, 10);
+  ctx.fillRect(left + w - 16, y - 10, 14, 10);
+  ctx.fillStyle = '#6AEEFD';
+  ctx.fillRect(left + 4, y - 9, 10, 6);
+  ctx.fillRect(left + w - 14, y - 9, 10, 6);
+
+  // Main frame - Electric Red accent
+  ctx.fillStyle = isSliding ? '#354093' : '#1a1a2e';
+  ctx.fillRect(left + 4, top + 18, w - 8, h - 32);
+  ctx.strokeStyle = isSliding ? '#6AEEFD' : '#E31902';
   ctx.lineWidth = 2;
-  ctx.strokeRect(left + 5, top + 15, w - 10, h - 25);
+  ctx.strokeRect(left + 4, top + 18, w - 8, h - 32);
+
+  // V-twin engine block (cyan/chrome)
+  ctx.fillStyle = isSliding ? '#354093' : '#C6FEFE';
+  ctx.fillRect(left + 10, top + 22, 10, 14);
+  ctx.fillRect(left + w - 20, top + 22, 10, 14);
+  ctx.strokeStyle = '#6AEEFD';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(left + 10, top + 22, 10, 14);
+  ctx.strokeRect(left + w - 20, top + 22, 10, 14);
+
+  // Fuel tank (dark with Shandy stripe)
+  ctx.fillStyle = isSliding ? '#252d6b' : '#1a1a2e';
+  ctx.fillRect(left + 6, top + 10, w - 12, 14);
+  ctx.strokeStyle = '#E31902';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(left + 6, top + 10, w - 12, 14);
+  ctx.fillStyle = isSliding ? '#6AEEFD' : '#FFED6D';
+  ctx.fillRect(left + w / 2 - 4, top + 12, 8, 10);
 
   // Seat
-  ctx.fillStyle = isSliding ? '#555' : '#1a1a1a';
-  ctx.fillRect(left + 8, top + 8, w - 16, 12);
+  ctx.fillStyle = isSliding ? '#252d6b' : '#354093';
+  ctx.fillRect(left + 6, top + 6, w - 12, 10);
+  ctx.strokeStyle = '#6AEEFD';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(left + 6, top + 6, w - 12, 10);
 
-  // Front wheel
-  ctx.fillStyle = '#222';
-  ctx.fillRect(left, y - 8, 12, 8);
-  ctx.fillRect(left + w - 12, y - 8, 12, 8);
-
-  // Headlight
-  ctx.fillStyle = '#ffeb99';
+  // Handlebars (cyan)
+  ctx.strokeStyle = isSliding ? '#354093' : '#6AEEFD';
+  ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.arc(left + w / 2, top + 5, 4, 0, Math.PI * 2);
+  ctx.moveTo(left + 4, top + 12);
+  ctx.lineTo(left - 4, top + 10);
+  ctx.moveTo(left + w - 4, top + 12);
+  ctx.lineTo(left + w + 4, top + 10);
+  ctx.stroke();
+
+  // Headlight (warm beam - Shandy)
+  ctx.fillStyle = '#354093';
+  ctx.beginPath();
+  ctx.arc(left + w / 2, top + 4, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#FFED6D';
+  ctx.beginPath();
+  ctx.arc(left + w / 2, top + 4, 3, 0, Math.PI * 2);
   ctx.fill();
 
   if (isSliding) ctx.restore();
