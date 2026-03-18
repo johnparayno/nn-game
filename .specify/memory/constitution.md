@@ -1,14 +1,14 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.0 → 2.0.0
-Modified principles: All replaced (Library-First, CLI, Test-First, Integration Testing, Observability → Mobile-First PWA, Touch & Performance, Gameplay First, PWA Essentials, Minimal Code, Placeholder Assets)
-Added sections: Technical Decision Criteria (in Governance)
-Removed sections: Library-First, CLI Interface, Integration Testing (library/CLI focus)
+Version change: 2.0.0 → 3.0.0
+Modified principles: All replaced (Mobile-First PWA, Touch & Performance, Gameplay First, PWA Essentials, Minimal Code, Placeholder Assets → Arcade-First Philosophy, Plain JavaScript & Canvas, Core Loop First, Minimal Complexity, Clean Changeable Code, Placeholder Assets Until Validated)
+Added sections: Fun/Speed/Iteration in Governance
+Removed sections: PWA Essentials, Mobile-First PWA (shift to general browser/arcade focus)
 Templates requiring updates:
   - .specify/templates/plan-template.md: ✅ Constitution Check gates updated
   - .specify/templates/spec-template.md: ✅ No mandatory section changes
-  - .specify/templates/tasks-template.md: ✅ Task categorization compatible (PWA setup, game loop phases)
+  - .specify/templates/tasks-template.md: ✅ Task categorization compatible (game loop, entities, mechanics)
   - .cursor/commands/*.md: ✅ No agent-specific references requiring update
 Follow-up TODOs: None
 -->
@@ -17,47 +17,48 @@ Follow-up TODOs: None
 
 ## Core Principles
 
-### I. Mobile-First PWA
+### I. Arcade-First Philosophy
 
-Build a simple, installable arcade game for mobile browsers using lightweight web technologies. The game MUST be designed and implemented for mobile first; desktop support is secondary.
+Build a fast, accessible browser experience with simple controls, immediate feedback, and short play sessions. The game MUST prioritize quick access, responsive input, and replayable bursts over long-form content.
 
-**Rationale**: Mobile browsers are the primary target. Installability and lightweight tech ensure reach and performance on constrained devices.
+**Rationale**: Arcade games thrive on instant gratification and pick-up-and-play. Slow loads, complex controls, or long sessions undermine the core appeal.
 
-### II. Touch Controls & Performance
+### II. Plain JavaScript & HTML5 Canvas
 
-Prioritize touch controls, fast load times, smooth rendering, and short replayable sessions. Input MUST feel responsive; load MUST be minimal; sessions MUST support quick play-and-repeat cycles.
+Use plain JavaScript and HTML5 canvas unless a framework clearly speeds up development. Do NOT introduce frameworks without clear development velocity justification.
 
-**Rationale**: Mobile players expect instant feedback and short bursts. Slow loads or laggy input kill retention.
+**Rationale**: Vanilla web tech keeps the stack lightweight, load times minimal, and code understandable. Frameworks add complexity; they are acceptable only when they demonstrably accelerate iteration.
 
-### III. Gameplay First (NON-NEGOTIABLE)
+### III. Core Loop First (NON-NEGOTIABLE)
 
-Core gameplay MUST be fun before adding upgrades, missions, menus, or visual polish. No meta-progression, UI chrome, or cosmetic work until the moment-to-moment loop is validated as enjoyable.
+Focus on one polished core loop before introducing menus, upgrades, missions, or cosmetic features. Core gameplay MUST be validated as fun before meta-progression or UI chrome.
 
-**Rationale**: Fun is the product. Features built on weak core loop waste effort and obscure what matters.
+**Rationale**: Fun is the product. Features built on a weak core loop waste effort and obscure what matters. Validate the moment-to-moment experience first.
 
-### IV. PWA Essentials
+### IV. Minimal Complexity
 
-Support PWA essentials: web app manifest, service worker, and home screen installation. The game MUST be installable and playable offline (or with graceful degradation) once installed.
+Avoid overengineering, heavy frameworks, and unnecessary backend complexity. Every dependency and service MUST be justified by a clear gameplay or product need.
 
-**Rationale**: Installability drives engagement. Service worker enables caching and offline play for arcade sessions.
+**Rationale**: Every dependency and service adds latency, complexity, and failure modes. Arcade games thrive on simplicity and fast iteration.
 
-### V. Minimal Code, No Backend Unless Needed
+### V. Clean, Changeable Code
 
-Keep code modular but minimal. Avoid unnecessary dependencies. Do NOT introduce backend services unless they unlock a clear gameplay or product need.
+Code MUST be easy to understand, easy to change, and structured around game states, entities, and reusable mechanics.
 
-**Rationale**: Every dependency and service adds latency, complexity, and failure modes. Mobile PWA thrives on simplicity.
+**Rationale**: Rapid iteration requires code that can be modified quickly without fear of breaking unrelated systems. Clear structure (states, entities, mechanics) supports this.
 
 ### VI. Placeholder Assets Until Validated
 
-Use placeholder assets until the core loop is validated. Art, sound, and polish come after gameplay is proven fun.
+Temporary assets are acceptable until the game feel is right. Art, sound, and polish come after core mechanics are proven fun.
 
-**Rationale**: Prevents sunk cost in assets for an unvalidated design. Enables rapid iteration on mechanics.
+**Rationale**: Prevents sunk cost in assets for an unvalidated design. Enables rapid iteration on mechanics without visual lock-in.
 
 ## Additional Constraints
 
-- Technology stack MUST be lightweight web (HTML, CSS, JS; minimal frameworks).
+- Technology stack MUST be lightweight web (HTML, CSS, JS; HTML5 canvas; minimal or no frameworks).
 - Performance goals MUST include load time, frame rate, and input latency targets.
 - Dependencies MUST be justified; prefer vanilla or minimal libraries.
+- Code structure MUST center on game states, entities, and reusable mechanics.
 
 ## Development Workflow
 
@@ -70,8 +71,9 @@ Use placeholder assets until the core loop is validated. Art, sound, and polish 
 This constitution supersedes all other practices. Amendments require documentation, approval rationale, and migration plan when principles change.
 
 - All PRs and reviews MUST verify compliance with Core Principles.
-- Every technical decision MUST support: speed, clarity, maintainability, and a better moment-to-moment player experience on mobile.
+- Every technical decision MUST support: fun, speed of iteration, clarity, and maintainability.
+- Fun, speed, and iteration matter more than technical perfection. Ship, learn, iterate.
 - Complexity MUST be justified in plan.md when deviating.
 - Use `.specify/` documentation for runtime development guidance.
 
-**Version**: 2.0.0 | **Ratified**: 2025-03-18 | **Last Amended**: 2025-03-18
+**Version**: 3.0.0 | **Ratified**: 2025-03-18 | **Last Amended**: 2025-03-18

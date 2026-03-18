@@ -1,0 +1,17 @@
+{
+  "name": "nn-game",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "echo \"No tests configured for MVP\" && exit 0",
+    "version:bump": "node scripts/bump-version.js",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "husky": "^9.1.7"
+  }
+}

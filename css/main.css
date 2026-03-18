@@ -1,0 +1,329 @@
+/* Motorcycle Arcade - Main Styles */
+/* Responsive layout, portrait lock */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  max-height: 100vh;
+  max-height: 100dvh;
+  object-fit: contain;
+  background-color: #0d0d0d;
+}
+
+/* Screens (loading, start) */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0d0d0d;
+  z-index: 2;
+}
+
+.screen.hidden {
+  display: none;
+}
+
+.loading-content,
+.start-content {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.loading-content h1,
+.start-content h1 {
+  font-size: 1.5rem;
+  margin: 0 0 1rem;
+  font-weight: 600;
+}
+
+.progress-container {
+  width: 200px;
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 auto 0.5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #4a9;
+  transition: width 0.2s ease;
+}
+
+#progress-text {
+  font-size: 0.875rem;
+  color: #888;
+  margin: 0;
+}
+
+.start-content #high-score-display {
+  font-size: 1rem;
+  margin: 0 0 1rem;
+  color: #aaa;
+}
+
+.rider-selection {
+  margin: 0 0 1rem;
+}
+
+.rider-label {
+  display: block;
+  font-size: 0.875rem;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+}
+
+.rider-options {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.rider-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: #333;
+  border: 2px solid #555;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.rider-btn:hover,
+.rider-btn:active {
+  background: #444;
+}
+
+.rider-btn[aria-pressed="true"] {
+  background: #4a9;
+  border-color: #5ba;
+}
+
+.mute-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #aaa;
+  background: transparent;
+  border: 1px solid #555;
+  border-radius: 6px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.mute-btn:hover,
+.mute-btn:active {
+  color: #fff;
+  border-color: #666;
+}
+
+.play-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #fff;
+  background: #4a9;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.play-btn:hover,
+.play-btn:active {
+  background: #5ba;
+}
+
+#game-canvas.hidden {
+  display: none;
+}
+
+/* Playing HUD */
+.playing-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.playing-overlay.hidden {
+  display: none;
+}
+
+.hud-score {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(74, 153, 153, 0.4);
+  padding: 0.25rem 0.5rem;
+  background: rgba(0,0,0,0.4);
+  border-radius: 8px;
+  align-self: flex-start;
+}
+
+.mute-btn-hud {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  font-size: 1.25rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #555;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  pointer-events: auto;
+  color: #fff;
+}
+
+.mute-btn-hud:hover,
+.mute-btn-hud:active {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.fuel-container {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  height: 12px;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid #555;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.fuel-meter {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #4a9, #2d7a5a);
+  transition: width 0.1s linear;
+  border-radius: 4px;
+}
+
+/* Version display - lower right corner */
+.version-display {
+  position: fixed;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Portrait lock: encourage portrait on mobile */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  #app {
+    max-height: 100vh;
+  }
+}
+
+/* US5: Portrait lock overlay - show when in landscape on mobile */
+.portrait-lock-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0d0d0d;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.portrait-lock-overlay p {
+  font-size: 1.125rem;
+  color: #aaa;
+  margin: 0 0 1rem;
+  max-width: 280px;
+}
+
+.portrait-lock-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  .portrait-lock-overlay {
+    display: flex;
+  }
+}
+
+/* US5: Responsive layout - ensure no horizontal scroll, proper scaling */
+@supports (height: 100dvh) {
+  html, body {
+    min-height: 100dvh;
+  }
+
+  #app,
+  #game-canvas {
+    max-height: 100dvh;
+  }
+}

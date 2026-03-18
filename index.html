@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a1a1a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="screen-orientation" content="portrait">
+  <title>Motorcycle Arcade</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <main id="app">
+    <!-- US5: Portrait lock - shown when device is in landscape on mobile -->
+    <div id="portrait-lock-overlay" class="portrait-lock-overlay" aria-hidden="true" aria-live="polite">
+      <span class="portrait-lock-icon" aria-hidden="true">📱</span>
+      <p>Please rotate your device to portrait to play</p>
+    </div>
+    <!-- Loading screen -->
+    <div id="loading-screen" class="screen">
+      <div class="loading-content">
+        <h1>Motorcycle Arcade</h1>
+        <div class="progress-container">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <p id="progress-text">Loading...</p>
+      </div>
+    </div>
+
+    <!-- Start screen -->
+    <div id="start-screen" class="screen hidden">
+      <div class="start-content">
+        <h1>Motorcycle Arcade</h1>
+        <p id="high-score-display">High Score: 0</p>
+        <div class="rider-selection">
+          <span class="rider-label">Select rider:</span>
+          <div class="rider-options">
+            <button type="button" class="rider-btn" data-rider="1" aria-pressed="true">1</button>
+            <button type="button" class="rider-btn" data-rider="2" aria-pressed="false">2</button>
+            <button type="button" class="rider-btn" data-rider="3" aria-pressed="false">3</button>
+          </div>
+        </div>
+        <button id="play-btn" class="play-btn">Tap to Play</button>
+        <button id="mute-btn-start" type="button" class="mute-btn" aria-label="Toggle sound">🔊 Sound</button>
+      </div>
+    </div>
+
+    <!-- Game over screen -->
+    <div id="game-over-screen" class="screen hidden">
+      <div class="start-content">
+        <h1>Game Over</h1>
+        <p id="final-score">Score: 0</p>
+        <p id="game-over-high-score">High Score: 0</p>
+        <button id="restart-btn" class="play-btn">Restart</button>
+      </div>
+    </div>
+
+    <div id="playing-overlay" class="playing-overlay hidden">
+      <div id="score-display" class="hud-score">0</div>
+      <button id="mute-btn-playing" type="button" class="mute-btn-hud" aria-label="Toggle sound">🔊</button>
+      <div class="fuel-container">
+        <div id="fuel-meter" class="fuel-meter"></div>
+      </div>
+    </div>
+    <canvas id="game-canvas" class="hidden"></canvas>
+
+    <!-- Version display (lower right) -->
+    <div id="version-display" class="version-display" aria-hidden="true">v0.1.1</div>
+
+    <!-- Offline-first-visit message (shown when offline and app cannot load) -->
+    <div id="offline-message" class="screen hidden">
+      <div class="start-content">
+        <h1>You're Offline</h1>
+        <p>Motorcycle Arcade needs to be loaded online first. Please check your connection and try again.</p>
+        <button id="offline-retry-btn" type="button" class="play-btn">Retry</button>
+      </div>
+    </div>
+  </main>
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>

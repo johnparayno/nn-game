@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Auto-bump version and stage for commit
+npm run version:bump
+git add package.json js/version.js
+
+npm test
