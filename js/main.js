@@ -35,7 +35,12 @@ import {
   playOilSlide,
   playCollection,
   playBoostRev,
-  resumeAudioContext
+  resumeAudioContext,
+  startIntroMusic,
+  fadeIntroMusicDown,
+  stopIntroMusic,
+  startStreetAmbient,
+  stopStreetAmbient
 } from './audio.js';
 
 const canvas = document.getElementById('game-canvas');
@@ -229,6 +234,18 @@ function showStartScreen() {
   const hs = getHighScore();
   if (highScoreDisplay) highScoreDisplay.textContent = `High Score: ${hs}`;
   syncMuteUI();
+  stopStreetAmbient();
+
+  // Start intro music (amigo sound) on first tap - requires user gesture for audio
+  // Skip when tapping play (play handler starts music briefly then fades)
+  if (startScreen) {
+    const startMusicOnTap = (e) => {
+      if (e.target === playBtn) return;
+      resumeAudioContext();
+      if (!getMute()) startIntroMusic();
+    };
+    startScreen.addEventListener('click', startMusicOnTap, { once: true });
+  }
 }
 
 function syncMuteUI() {
@@ -242,6 +259,8 @@ function syncMuteUI() {
 }
 
 function enterPlayingState() {
+  fadeIntroMusicDown();
+  if (!getMute()) startStreetAmbient();
   if (startScreen) startScreen.classList.add('hidden');
   if (canvas) canvas.classList.remove('hidden');
   if (playingOverlay) playingOverlay.classList.remove('hidden');
@@ -296,6 +315,7 @@ state.subscribe(({ prev, next }) => {
 });
 
 function showGameOverScreen() {
+  stopStreetAmbient();
   if (playingOverlay) playingOverlay.classList.add('hidden');
   if (canvas) canvas.classList.add('hidden');
   const gameOverScreen = document.getElementById('game-over-screen');
@@ -349,8 +369,17 @@ function init() {
 
   if (playBtn) {
     playBtn.addEventListener('click', () => {
-      resumeAudioContext();
-      if (state.isStart()) state.set(STATES.PLAYING);
+      try {
+        if (state.isStart()) {
+          resumeAudioContext();
+          if (!getMute()) startIntroMusic();
+          fadeIntroMusicDown();
+          state.set(STATES.PLAYING);
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-undef -- browser global
+        console.error('Play button error:', err);
+      }
     });
   }
 
@@ -359,6 +388,11 @@ function init() {
       resumeAudioContext();
       setMute(!getMute());
       syncMuteUI();
+      if (getMute()) {
+        stopIntroMusic();
+      } else {
+        startIntroMusic();
+      }
     });
   }
 
@@ -367,6 +401,11 @@ function init() {
       resumeAudioContext();
       setMute(!getMute());
       syncMuteUI();
+      if (getMute()) {
+        stopStreetAmbient();
+      } else if (state.isPlaying()) {
+        startStreetAmbient();
+      }
     });
   }
 

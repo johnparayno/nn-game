@@ -1,79 +1,63 @@
-<!--
-Sync Impact Report
-==================
-Version change: 2.0.0 → 3.0.0
-Modified principles: All replaced (Mobile-First PWA, Touch & Performance, Gameplay First, PWA Essentials, Minimal Code, Placeholder Assets → Arcade-First Philosophy, Plain JavaScript & Canvas, Core Loop First, Minimal Complexity, Clean Changeable Code, Placeholder Assets Until Validated)
-Added sections: Fun/Speed/Iteration in Governance
-Removed sections: PWA Essentials, Mobile-First PWA (shift to general browser/arcade focus)
-Templates requiring updates:
-  - .specify/templates/plan-template.md: ✅ Constitution Check gates updated
-  - .specify/templates/spec-template.md: ✅ No mandatory section changes
-  - .specify/templates/tasks-template.md: ✅ Task categorization compatible (game loop, entities, mechanics)
-  - .cursor/commands/*.md: ✅ No agent-specific references requiring update
-Follow-up TODOs: None
--->
-
 # NN Game Constitution
 
 ## Core Principles
 
-### I. Arcade-First Philosophy
+### I. Mobile-First PWA
 
-Build a fast, accessible browser experience with simple controls, immediate feedback, and short play sessions. The game MUST prioritize quick access, responsive input, and replayable bursts over long-form content.
+The game MUST be a mobile-first Progressive Web App: installable, touch-first, landscape orientation. Desktop support is for testing only.
 
-**Rationale**: Arcade games thrive on instant gratification and pick-up-and-play. Slow loads, complex controls, or long sessions undermine the core appeal.
+**Rationale**: The target experience is arcade play on smartphones. PWA enables distribution without app stores and offline play after initial load.
 
-### II. Plain JavaScript & HTML5 Canvas
+### II. Gameplay-First (NON-NEGOTIABLE)
 
-Use plain JavaScript and HTML5 canvas unless a framework clearly speeds up development. Do NOT introduce frameworks without clear development velocity justification.
+Validate the core loop before meta-features. One polished loop: drive, avoid traffic, collect coins, survive. No missions, multiplayer, or backend.
 
-**Rationale**: Vanilla web tech keeps the stack lightweight, load times minimal, and code understandable. Frameworks add complexity; they are acceptable only when they demonstrably accelerate iteration.
+**Rationale**: Fun is the product. Features built on a weak core loop waste effort. Validate moment-to-moment experience first.
 
-### III. Core Loop First (NON-NEGOTIABLE)
+### III. Plain JavaScript & HTML5 Canvas
 
-Focus on one polished core loop before introducing menus, upgrades, missions, or cosmetic features. Core gameplay MUST be validated as fun before meta-progression or UI chrome.
+Use JavaScript and HTML5 canvas. Phaser is optional. No backend. localStorage only if needed. No overengineering.
 
-**Rationale**: Fun is the product. Features built on a weak core loop waste effort and obscure what matters. Validate the moment-to-moment experience first.
+**Rationale**: Lightweight stack, fast load, readable code. Minimal dependencies keep iteration fast.
 
 ### IV. Minimal Complexity
 
-Avoid overengineering, heavy frameworks, and unnecessary backend complexity. Every dependency and service MUST be justified by a clear gameplay or product need.
+Avoid overengineering, heavy frameworks, and unnecessary systems. Every dependency MUST be justified by clear gameplay need.
 
-**Rationale**: Every dependency and service adds latency, complexity, and failure modes. Arcade games thrive on simplicity and fast iteration.
+**Rationale**: Arcade games thrive on simplicity. Complexity adds latency and slows iteration.
 
-### V. Clean, Changeable Code
+### V. Clean, Modular Code
 
-Code MUST be easy to understand, easy to change, and structured around game states, entities, and reusable mechanics.
+Code MUST be readable and modular. Structure around game states, entities, and reusable mechanics. Fast iteration over perfect structure.
 
-**Rationale**: Rapid iteration requires code that can be modified quickly without fear of breaking unrelated systems. Clear structure (states, entities, mechanics) supports this.
+**Rationale**: Rapid iteration requires code that can be changed quickly without breaking unrelated systems.
 
 ### VI. Placeholder Assets Until Validated
 
-Temporary assets are acceptable until the game feel is right. Art, sound, and polish come after core mechanics are proven fun.
+Temporary assets are acceptable until gameplay feel is right. Art and polish come after core mechanics are proven fun.
 
-**Rationale**: Prevents sunk cost in assets for an unvalidated design. Enables rapid iteration on mechanics without visual lock-in.
+**Rationale**: Prevents sunk cost in assets for unvalidated design. Enables rapid iteration on mechanics.
 
 ## Additional Constraints
 
-- Technology stack MUST be lightweight web (HTML, CSS, JS; HTML5 canvas; minimal or no frameworks).
-- Performance goals MUST include load time, frame rate, and input latency targets.
+- Technology MUST be lightweight web: HTML, CSS, JS, HTML5 canvas.
+- Performance MUST target smooth mobile gameplay (close to 60fps), fast initial load, low asset weight.
+- PWA MUST include manifest.json, service worker, and installable experience.
 - Dependencies MUST be justified; prefer vanilla or minimal libraries.
-- Code structure MUST center on game states, entities, and reusable mechanics.
 
 ## Development Workflow
 
 - Code review MUST verify constitution compliance.
 - Each feature MUST have a spec, plan, and tasks before implementation.
-- Complexity violations (e.g., adding backend, heavy framework) MUST be documented in plan Complexity Tracking table.
+- Complexity violations MUST be documented when deviating.
 
 ## Governance
 
-This constitution supersedes all other practices. Amendments require documentation, approval rationale, and migration plan when principles change.
+This constitution supersedes all other practices. Amendments require documentation, approval rationale, and migration plan.
 
 - All PRs and reviews MUST verify compliance with Core Principles.
-- Every technical decision MUST support: fun, speed of iteration, clarity, and maintainability.
+- Every technical decision MUST support: fun, speed of iteration, clarity, maintainability.
 - Fun, speed, and iteration matter more than technical perfection. Ship, learn, iterate.
-- Complexity MUST be justified in plan.md when deviating.
 - Use `.specify/` documentation for runtime development guidance.
 
-**Version**: 3.0.0 | **Ratified**: 2025-03-18 | **Last Amended**: 2025-03-18
+**Version**: 4.0.0 | **Ratified**: 2026-03-19 | **Last Amended**: 2026-03-19

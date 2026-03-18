@@ -32,4 +32,15 @@ JavaScript (ES6+), HTML5, CSS3: Follow standard conventions
 - 001-motorcycle-arcade-pwa: Added JavaScript (ES6+), HTML5, CSS3 + Vanilla JS, HTML5 Canvas, Web Audio API, Service Worker API, Web App Manifes
 
 <!-- MANUAL ADDITIONS START -->
+
+## PWA Cache Versioning
+
+When changing cached assets (HTML, CSS, JS, images, manifest), bump the cache version in `sw.js`:
+
+```js
+const CACHE_NAME = 'moto-arcade-v4';  // increment v3 → v4, etc.
+```
+
+This ensures users get fresh content on refresh instead of stale cached design.
+
 <!-- MANUAL ADDITIONS END -->

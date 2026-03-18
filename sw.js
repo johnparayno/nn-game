@@ -2,7 +2,7 @@
  * Service worker - cache-first strategy for PWA offline support
  * Precache static assets on install; serve from cache when available
  */
-const CACHE_NAME = 'moto-arcade-v2';
+const CACHE_NAME = 'moto-arcade-v7';
 
 const PRECACHE_URLS = [
   '/',
@@ -10,9 +10,11 @@ const PRECACHE_URLS = [
   '/manifest.json',
   '/css/main.css',
   '/js/main.js',
+  '/js/version.js',
   '/js/game/state.js',
   '/js/game/entities.js',
   '/js/game/road.js',
+  '/js/game/render.js',
   '/js/game/collision.js',
   '/js/game/spawner.js',
   '/js/game/input.js',
@@ -54,7 +56,7 @@ self.addEventListener('fetch', (event) => {
           if (event.request.mode === 'navigate') {
             return caches.match('/index.html').then((fallback) => {
               if (fallback) return fallback;
-              const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline - Motorcycle Arcade</title><style>body{font-family:system-ui,sans-serif;background:#1a1a1a;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:1rem}button{background:#4a9;color:#fff;border:none;padding:12px 24px;font-size:1rem;border-radius:8px;cursor:pointer;margin-top:1rem}button:hover{background:#5ba}</style></head><body><h1>You're Offline</h1><p>Motorcycle Arcade needs to be loaded online first. Please check your connection and try again.</p><button onclick="location.reload()">Retry</button></body></html>`;
+              const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline - 80's OVERDRIVE</title><style>body{font-family:system-ui,sans-serif;background:#1a1a1a;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:1rem}button{background:#4a9;color:#fff;border:none;padding:12px 24px;font-size:1rem;border-radius:8px;cursor:pointer;margin-top:1rem}button:hover{background:#5ba}</style></head><body><h1>You're Offline</h1><p>80's OVERDRIVE needs to be loaded online first. Please check your connection and try again.</p><button onclick="location.reload()">Retry</button></body></html>`;
               return new Response(html, { headers: { 'Content-Type': 'text/html' } });
             });
           }

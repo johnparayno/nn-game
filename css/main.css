@@ -1,5 +1,5 @@
-/* Motorcycle Arcade - Subway Surfers Style */
-/* Vibrant colors, bold typography, urban arcade aesthetic */
+/* 80's OVERDRIVE - 2D Pixel Art Racing Game */
+/* Neon retrowave, Out Run inspired, synthwave aesthetic */
 
 *,
 *::before,
@@ -21,9 +21,9 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   overflow: hidden;
-  background: linear-gradient(165deg, #354093 0%, #1a1a2e 50%, #0d0d1a 100%);
+  background: #0d0221;
   color: #fff;
-  font-family: 'Righteous', sans-serif;
+  font-family: 'VT323', monospace;
 }
 
 body {
@@ -51,6 +51,7 @@ body {
   overflow: hidden;
 }
 
+/* Pixel-perfect canvas - crisp retro scaling */
 #game-canvas {
   display: block;
   width: 100%;
@@ -59,17 +60,25 @@ body {
   max-height: 100vh;
   max-height: 100dvh;
   object-fit: contain;
-  background: linear-gradient(180deg, #6AEEFD 0%, #354093 60%, #1a1a2e 100%);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #0d0221;
 }
 
-/* Screens (loading, start) - Subway Surfers vibe */
+/* Screens - neon sunset gradient */
 .screen {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(165deg, #354093 0%, #1a1a2e 40%, #0d0d1a 100%);
+  background: linear-gradient(180deg,
+    #0d0221 0%,
+    #1a0a2e 20%,
+    #2d1b4e 40%,
+    #ff0052 60%,
+    #ff6b35 80%,
+    #ffef00 100%);
   z-index: 2;
 }
 
@@ -83,67 +92,69 @@ body {
   padding: 1.5rem;
 }
 
-/* Game Over screen - Electric Red accent */
-#game-over-screen .start-content h1 {
-  color: #E31902;
+/* Title - pixel font, neon glow */
+.loading-content h1,
+.start-content h1 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.25rem;
+  margin: 0 0 1rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #00f3ff;
   text-shadow:
-    0 0 10px rgba(227, 25, 2, 0.6),
-    0 0 20px rgba(255, 237, 109, 0.3),
-    3px 3px 0 #FFED6D,
-    -1px -1px 0 #354093;
+    0 0 10px #00f3ff,
+    0 0 20px #ff0052,
+    0 0 40px #9e00ff,
+    2px 2px 0 #ff0052,
+    -1px -1px 0 #9e00ff;
+}
+
+/* Game Over screen - hot pink accent */
+#game-over-screen .start-content h1 {
+  color: #ff0052;
+  text-shadow:
+    0 0 15px #ff0052,
+    0 0 30px #ff6b35,
+    2px 2px 0 #00f3ff,
+    -1px -1px 0 #9e00ff;
 }
 
 #game-over-screen #final-score,
 #game-over-screen #game-over-high-score {
-  color: #C6FEFE;
-  text-shadow: 0 0 8px rgba(198, 254, 254, 0.5);
-}
-
-.loading-content h1,
-.start-content h1 {
-  font-family: 'Bangers', cursive;
-  font-size: 2.25rem;
-  margin: 0 0 1rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: #FFED6D;
-  text-shadow:
-    0 0 10px rgba(255, 237, 109, 0.6),
-    0 0 20px rgba(106, 238, 253, 0.4),
-    3px 3px 0 #E31902,
-    -1px -1px 0 #354093;
+  color: #00f3ff;
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
 }
 
 .progress-container {
   width: 220px;
-  height: 12px;
-  background: rgba(53, 64, 147, 0.6);
-  border: 2px solid #6AEEFD;
-  border-radius: 8px;
+  height: 16px;
+  background: rgba(13, 2, 33, 0.9);
+  border: 3px solid #00f3ff;
   overflow: hidden;
   margin: 0 auto 0.5rem;
-  box-shadow: 0 0 12px rgba(106, 238, 253, 0.3);
+  box-shadow:
+    0 0 15px rgba(0, 243, 255, 0.5),
+    inset 0 0 10px rgba(158, 0, 255, 0.2);
 }
 
 .progress-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #FFED6D, #F7BE76);
+  background: linear-gradient(90deg, #ff0052, #ff6b35);
   transition: width 0.2s ease;
-  border-radius: 6px;
 }
 
 #progress-text {
-  font-size: 0.875rem;
-  color: #C6FEFE;
+  font-size: 1.25rem;
+  color: #00f3ff;
   margin: 0;
 }
 
 .start-content #high-score-display {
-  font-size: 1.125rem;
+  font-size: 1.5rem;
   margin: 0 0 1rem;
-  color: #C6FEFE;
-  text-shadow: 0 0 8px rgba(198, 254, 254, 0.5);
+  color: #ffef00;
+  text-shadow: 0 0 10px rgba(255, 239, 0, 0.6);
 }
 
 .rider-selection {
@@ -152,8 +163,8 @@ body {
 
 .rider-label {
   display: block;
-  font-size: 0.875rem;
-  color: #C6FEFE;
+  font-size: 1.25rem;
+  color: #00f3ff;
   margin-bottom: 0.5rem;
 }
 
@@ -169,70 +180,65 @@ body {
   font-size: 1.125rem;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(180deg, #354093, #252d6b);
-  border: 2px solid #6AEEFD;
-  border-radius: 10px;
+  background: #1a0a2e;
+  border: 3px solid #00f3ff;
   cursor: pointer;
   touch-action: manipulation;
-  box-shadow: 0 4px 0 #1a1a2e, 0 0 12px rgba(106, 238, 253, 0.3);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
 }
 
 .rider-btn:hover,
 .rider-btn:active {
-  background: linear-gradient(180deg, #4553a8, #354093);
-  transform: translateY(1px);
-  box-shadow: 0 2px 0 #1a1a2e, 0 0 16px rgba(106, 238, 253, 0.5);
+  background: #2d1b4e;
+  box-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
 }
 
 .rider-btn[aria-pressed="true"] {
-  background: linear-gradient(180deg, #FFED6D, #F7BE76);
-  border-color: #FFED6D;
-  color: #1a1a2e;
-  box-shadow: 0 4px 0 #c9a227, 0 0 16px rgba(255, 237, 109, 0.6);
+  background: #ff0052;
+  border-color: #ffef00;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255, 0, 82, 0.8);
 }
 
 .mute-btn {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  color: #C6FEFE;
+  font-size: 1.25rem;
+  color: #00f3ff;
   background: transparent;
-  border: 2px solid #6AEEFD;
-  border-radius: 8px;
+  border: 3px solid #00f3ff;
   cursor: pointer;
   touch-action: manipulation;
 }
 
 .mute-btn:hover,
 .mute-btn:active {
-  color: #FFED6D;
-  border-color: #FFED6D;
-  box-shadow: 0 0 12px rgba(255, 237, 109, 0.4);
+  color: #ffef00;
+  border-color: #ffef00;
+  box-shadow: 0 0 15px rgba(255, 239, 0, 0.5);
 }
 
 .play-btn {
   padding: 0.875rem 2rem;
   font-size: 1.25rem;
-  font-family: 'Bangers', cursive;
+  font-family: 'Press Start 2P', cursive;
   font-weight: 400;
   letter-spacing: 0.05em;
-  color: #1a1a2e;
-  background: linear-gradient(180deg, #FFED6D, #F7BE76);
-  border: none;
-  border-radius: 12px;
+  color: #0d0221;
+  background: linear-gradient(180deg, #00f3ff, #00b8d4);
+  border: 3px solid #ffef00;
   cursor: pointer;
   touch-action: manipulation;
   box-shadow:
-    0 6px 0 #c9a227,
-    0 0 20px rgba(255, 237, 109, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 0 20px rgba(0, 243, 255, 0.8),
+    0 0 40px rgba(255, 0, 82, 0.3);
 }
 
 .play-btn:hover,
 .play-btn:active {
-  background: linear-gradient(180deg, #fff176, #FFED6D);
-  transform: translateY(2px);
-  box-shadow: 0 4px 0 #c9a227, 0 0 24px rgba(255, 237, 109, 0.6);
+  background: linear-gradient(180deg, #ffef00, #ff6b35);
+  border-color: #ff0052;
+  box-shadow: 0 0 30px rgba(255, 239, 0, 0.9);
 }
 
 #game-canvas.hidden {
@@ -255,21 +261,20 @@ body {
 }
 
 .hud-score {
-  font-family: 'Bangers', cursive;
-  font-size: 2rem;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.25rem;
   font-weight: 400;
   letter-spacing: 0.05em;
-  color: #FFED6D;
+  color: #ffef00;
   text-shadow:
-    0 0 10px rgba(255, 237, 109, 0.8),
-    0 0 20px rgba(106, 238, 253, 0.4),
-    2px 2px 0 #E31902;
-  padding: 0.35rem 0.75rem;
-  background: rgba(53, 64, 147, 0.7);
-  border: 2px solid #6AEEFD;
-  border-radius: 10px;
+    0 0 10px #ffef00,
+    0 0 20px #ff0052,
+    2px 2px 0 #00f3ff;
+  padding: 0.5rem 1rem;
+  background: rgba(13, 2, 33, 0.85);
+  border: 3px solid #00f3ff;
   align-self: flex-start;
-  box-shadow: 0 0 16px rgba(106, 238, 253, 0.3);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
 }
 
 .mute-btn-hud {
@@ -280,20 +285,19 @@ body {
   height: 2.75rem;
   padding: 0;
   font-size: 1.25rem;
-  background: rgba(53, 64, 147, 0.8);
-  border: 2px solid #6AEEFD;
-  border-radius: 10px;
+  background: rgba(13, 2, 33, 0.9);
+  border: 3px solid #00f3ff;
   cursor: pointer;
   touch-action: manipulation;
   pointer-events: auto;
   color: #fff;
-  box-shadow: 0 0 12px rgba(106, 238, 253, 0.3);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
 }
 
 .mute-btn-hud:hover,
 .mute-btn-hud:active {
-  background: rgba(106, 238, 253, 0.3);
-  box-shadow: 0 0 20px rgba(106, 238, 253, 0.6);
+  background: rgba(0, 243, 255, 0.2);
+  box-shadow: 0 0 25px rgba(0, 243, 255, 0.7);
 }
 
 .fuel-container {
@@ -301,48 +305,46 @@ body {
   bottom: 1rem;
   left: 1rem;
   right: 1rem;
-  height: 14px;
-  background: rgba(53, 64, 147, 0.6);
-  border: 2px solid #6AEEFD;
-  border-radius: 8px;
+  height: 16px;
+  background: rgba(13, 2, 33, 0.9);
+  border: 3px solid #00f3ff;
   overflow: hidden;
-  box-shadow: 0 0 12px rgba(106, 238, 253, 0.2);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
 }
 
 .fuel-meter {
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, #FFED6D, #F7BE76);
+  background: linear-gradient(90deg, #ff0052, #ff6b35);
   transition: width 0.1s linear;
-  border-radius: 6px;
 }
 
-/* Version display - lower right corner */
+/* Version display */
 .version-display {
   position: fixed;
   bottom: 0.5rem;
   right: 0.5rem;
-  font-size: 0.7rem;
-  color: rgba(198, 254, 254, 0.6);
+  font-size: 0.9rem;
+  color: rgba(0, 243, 255, 0.6);
   z-index: 10;
   pointer-events: none;
   user-select: none;
 }
 
-/* Portrait lock: encourage portrait on mobile */
+/* Portrait lock */
 @media screen and (orientation: landscape) and (max-height: 500px) {
   #app {
     max-height: 100vh;
   }
 }
 
-/* US5: Portrait lock overlay - show when in landscape on mobile */
 .portrait-lock-overlay {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: linear-gradient(165deg, #354093 0%, #1a1a2e 100%);
+  pointer-events: none;
+  background: linear-gradient(180deg, #0d0221, #2d1b4e);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -351,8 +353,8 @@ body {
 }
 
 .portrait-lock-overlay p {
-  font-size: 1.125rem;
-  color: #C6FEFE;
+  font-size: 1.25rem;
+  color: #00f3ff;
   margin: 0 0 1rem;
   max-width: 280px;
 }
@@ -369,7 +371,6 @@ body {
   }
 }
 
-/* US5: Responsive layout - ensure no horizontal scroll, proper scaling */
 @supports (height: 100dvh) {
   html, body {
     min-height: 100dvh;
